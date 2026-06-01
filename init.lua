@@ -1,7 +1,6 @@
 -- Requiring  config files
 require("jashan.config.keymaps")
 require("jashan.config.lazy")
-require("jashan.config.lsp")
 
 vim.cmd.syntax("enable")
 vim.cmd.filetype({ "plugin", "indent", "on" })
