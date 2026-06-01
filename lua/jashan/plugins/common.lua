@@ -70,4 +70,21 @@ return {
 			end, { expr = true, silent = true })
 		end,
 	},
+	{
+		-- mini.ai
+		{
+			"nvim-mini/mini.ai",
+			event = "VeryLazy",
+			opts = {
+				n_lines = 500,
+			},
+		},
+
+		-- mini.surround
+		{
+			"nvim-mini/mini.surround",
+			event = "VeryLazy",
+			opts = {},
+		},
+	},
 }
