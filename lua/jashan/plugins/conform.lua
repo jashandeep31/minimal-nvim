@@ -8,6 +8,9 @@ return {
 			javascriptreact = { "prettier" },
 			typescriptreact = { "prettier" },
 			json = { "prettier" },
+			python = { "isort", "black" },
+			prisma = { "prismals" },
+			go = { "goimports", "gofumpt" },
 		},
 		format_on_save = {
 			-- These options will be passed to conform.format()
