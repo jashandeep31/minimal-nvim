@@ -10,10 +10,7 @@ return {
 		bigfile = { enabled = false },
 		dashboard = { enabled = false },
 		explorer = {
-			enabled = true,
-			layout = {
-				position = "right",
-			},
+			enabled = false,
 		},
 		indent = { enabled = false },
 		input = { enabled = true },
@@ -79,13 +76,6 @@ return {
 			end,
 			mode = { "n", "t" },
 			desc = "Toggle Floating Terminal",
-		},
-		{
-			"<leader>e",
-			function()
-				Snacks.explorer()
-			end,
-			desc = "File Explorer",
 		},
 	},
 }
