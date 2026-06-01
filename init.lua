@@ -33,3 +33,8 @@ vim.o.updatetime = 250
 
 -- Decrease mapped sequence wait time
 vim.o.timeoutlen = 300
+
+-- using the system clipboard
+vim.schedule(function()
+	vim.o.clipboard = "unnamedplus"
+end)

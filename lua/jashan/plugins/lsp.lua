@@ -255,6 +255,44 @@ return {
 					map("<C-k>", vim.lsp.buf.signature_help, "LSP: Signature Help", { "n", "i" })
 					map("<leader>cr", vim.lsp.buf.rename, "LSP: Rename")
 					map("<leader>ca", vim.lsp.buf.code_action, "LSP: Code Action", { "n", "v" })
+
+					map("gD", smart_jump_new_tab("textDocument/declaration"), "LSP: Declaration")
+
+					map("]d", function()
+						vim.diagnostic.jump({ count = 1 })
+					end, "Next Diagnostic")
+
+					map("[d", function()
+						vim.diagnostic.jump({ count = -1 })
+					end, "Prev Diagnostic")
+
+					map("]e", function()
+						vim.diagnostic.jump({
+							count = 1,
+							severity = vim.diagnostic.severity.ERROR,
+						})
+					end, "Next Error")
+
+					map("[e", function()
+						vim.diagnostic.jump({
+							count = -1,
+							severity = vim.diagnostic.severity.ERROR,
+						})
+					end, "Prev Error")
+
+					map("]w", function()
+						vim.diagnostic.jump({
+							count = 1,
+							severity = vim.diagnostic.severity.WARN,
+						})
+					end, "Next Warning")
+
+					map("[w", function()
+						vim.diagnostic.jump({
+							count = -1,
+							severity = vim.diagnostic.severity.WARN,
+						})
+					end, "Prev Warning")
 				end,
 			})
 		end,

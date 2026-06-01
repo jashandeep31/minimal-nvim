@@ -14,22 +14,6 @@ keymap.set("n", "OO", "O<Esc>j", { noremap = true, silent = true })
 -- clear search highlights
 keymap.set("n", "<leader>nh", ":nohl<CR>", { desc = "Clear search highlights" })
 
--- Diagnostics (errors, warnings, hints)
-keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Next diagnostic" })
-keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Prev diagnostic" })
-
--- Errors only
-keymap.set("n", "]e", function()
-	vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.ERROR })
-end, { desc = "Next error" })
-keymap.set("n", "[e", function()
-	vim.diagnostic.goto_prev({ severity = vim.diagnostic.severity.ERROR })
-end, { desc = "Prev error" })
--- Warnings only (bonus)
-keymap.set("n", "]w", function()
-	vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.WARN })
-end, { desc = "Next warning" })
-
 -- Move lines up and down
 keymap.set("n", "<A-j>", ":m .+1<CR>==", { desc = "Move line down" })
 keymap.set("n", "<A-k>", ":m .-2<CR>==", { desc = "Move line up" })

@@ -9,7 +9,12 @@ return {
 		-- refer to the configuration section below
 		bigfile = { enabled = false },
 		dashboard = { enabled = false },
-		explorer = { enabled = true },
+		explorer = {
+			enabled = true,
+			layout = {
+				position = "right",
+			},
+		},
 		indent = { enabled = false },
 		input = { enabled = true },
 		picker = { enabled = true },
