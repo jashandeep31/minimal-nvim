@@ -1,0 +1,4 @@
+1. Using builtin lsp
+2. Mason config improvements
+3. Blink.lua 
+
