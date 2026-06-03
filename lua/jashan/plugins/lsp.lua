@@ -227,6 +227,20 @@ return {
 				end
 			end
 
+			local function jump_diagnostic(opts)
+				return function()
+					vim.diagnostic.jump(opts)
+					vim.schedule(function()
+						vim.diagnostic.open_float({
+							border = "rounded",
+							focus = false,
+							scope = "line",
+							source = "if_many",
+						})
+					end)
+				end
+			end
+
 			vim.api.nvim_create_autocmd("LspAttach", {
 				group = vim.api.nvim_create_augroup("jashan_lsp", { clear = true }),
 				callback = function(args)
@@ -258,41 +272,29 @@ return {
 
 					map("gD", smart_jump_new_tab("textDocument/declaration"), "LSP: Declaration")
 
-					map("]d", function()
-						vim.diagnostic.jump({ count = 1 })
-					end, "Next Diagnostic")
+					map("]d", jump_diagnostic({ count = 1 }), "Next Diagnostic")
 
-					map("[d", function()
-						vim.diagnostic.jump({ count = -1 })
-					end, "Prev Diagnostic")
+					map("[d", jump_diagnostic({ count = -1 }), "Prev Diagnostic")
 
-					map("]e", function()
-						vim.diagnostic.jump({
-							count = 1,
-							severity = vim.diagnostic.severity.ERROR,
-						})
-					end, "Next Error")
+					map("]e", jump_diagnostic({
+						count = 1,
+						severity = vim.diagnostic.severity.ERROR,
+					}), "Next Error")
 
-					map("[e", function()
-						vim.diagnostic.jump({
-							count = -1,
-							severity = vim.diagnostic.severity.ERROR,
-						})
-					end, "Prev Error")
+					map("[e", jump_diagnostic({
+						count = -1,
+						severity = vim.diagnostic.severity.ERROR,
+					}), "Prev Error")
 
-					map("]w", function()
-						vim.diagnostic.jump({
-							count = 1,
-							severity = vim.diagnostic.severity.WARN,
-						})
-					end, "Next Warning")
+					map("]w", jump_diagnostic({
+						count = 1,
+						severity = vim.diagnostic.severity.WARN,
+					}), "Next Warning")
 
-					map("[w", function()
-						vim.diagnostic.jump({
-							count = -1,
-							severity = vim.diagnostic.severity.WARN,
-						})
-					end, "Prev Warning")
+					map("[w", jump_diagnostic({
+						count = -1,
+						severity = vim.diagnostic.severity.WARN,
+					}), "Prev Warning")
 				end,
 			})
 		end,
