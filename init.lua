@@ -38,3 +38,10 @@ vim.o.timeoutlen = 300
 vim.schedule(function()
 	vim.o.clipboard = "unnamedplus"
 end)
+
+-- Enable persistent undo
+vim.o.undofile = true
+
+-- Set the directory where undo files will be saved
+-- Make sure this directory exists on your system!
+vim.o.undodir = vim.fn.stdpath("data") .. "/undodir"
