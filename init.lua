@@ -6,7 +6,7 @@ vim.cmd.syntax("enable")
 vim.cmd.filetype({ "plugin", "indent", "on" })
 
 vim.o.number = true
-vim.relativenumber = true
+vim.o.relativenumber = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.o.mouse = "a"
