@@ -6,6 +6,17 @@ return {
 	},
 	keys = {
 		{
+			"<leader>,",
+			function()
+				require("telescope.builtin").buffers(require("telescope.themes").get_dropdown({
+					previewer = false,
+					sort_lastused = true,
+					ignore_current_buffer = true,
+				}))
+			end,
+			desc = "Search Open Buffers",
+		},
+		{
 			"<leader><leader>",
 			function()
 				require("telescope.builtin").find_files()
@@ -20,7 +31,7 @@ return {
 			desc = "Live Grep",
 		},
 		{
-			"<leader>fb",
+			"<leader>b",
 			function()
 				require("telescope.builtin").current_buffer_fuzzy_find(require("telescope.themes").get_dropdown({
 					winblend = 10,
