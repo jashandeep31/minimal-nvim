@@ -1,20 +1,32 @@
 return {
-	"mason-org/mason.nvim",
-	opts = {
-		insure_installed = {
-			"ts_ls",
-			"html",
-			"cssls",
-			"tailwindcss",
-			"svelte",
-			"lua_ls",
-			"graphql",
-			"pyright",
-			"emmet-language-server",
-			"emmet_ls",
-			"eslint",
-			"stylua",
+	{
+		"mason-org/mason.nvim",
+		opts = {
+			PATH = "prepend",
 		},
-		automatic_enable = true,
+	},
+	{
+		"mason-org/mason-lspconfig.nvim",
+		dependencies = {
+			"mason-org/mason.nvim",
+			"neovim/nvim-lspconfig",
+		},
+		opts = {
+			ensure_installed = {
+				"lua_ls",
+				"gopls",
+				"ts_ls",
+				"html",
+				"cssls",
+				"tailwindcss",
+				"svelte",
+				"pyright",
+				"graphql",
+				"prismals",
+				"emmet_ls",
+				"eslint",
+			},
+			automatic_enable = false,
+		},
 	},
 }

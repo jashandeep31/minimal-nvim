@@ -179,7 +179,7 @@ return {
 
 			vim.diagnostic.config({
 				severity_sort = true,
-				update_in_insert = false,
+				update_in_insert = true,
 				float = {
 					border = "rounded",
 					source = "if_many",
@@ -202,7 +202,7 @@ return {
 
 			local function smart_jump_new_tab(method)
 				return function()
-					local params = vim.lsp.util.make_position_params()
+					local params = vim.lsp.util.make_position_params(0, "utf-8")
 					vim.lsp.buf_request(0, method, params, function(err, result)
 						if err then
 							vim.notify("LSP error: " .. err.message)
@@ -217,7 +217,7 @@ return {
 						local locations = vim.islist(result) and result or { result }
 
 						if #locations == 1 then
-							vim.lsp.util.jump_to_location(locations[1])
+							vim.lsp.util.show_document(locations[1], "utf-8", { focus = true })
 						else
 							vim.cmd("tabnew")
 							vim.lsp.util.set_qflist(vim.lsp.util.locations_to_items(locations))
@@ -270,31 +270,45 @@ return {
 					map("<leader>cr", vim.lsp.buf.rename, "LSP: Rename")
 					map("<leader>ca", vim.lsp.buf.code_action, "LSP: Code Action", { "n", "v" })
 
-					map("gD", smart_jump_new_tab("textDocument/declaration"), "LSP: Declaration")
-
 					map("]d", jump_diagnostic({ count = 1 }), "Next Diagnostic")
 
 					map("[d", jump_diagnostic({ count = -1 }), "Prev Diagnostic")
 
-					map("]e", jump_diagnostic({
-						count = 1,
-						severity = vim.diagnostic.severity.ERROR,
-					}), "Next Error")
+					map(
+						"]e",
+						jump_diagnostic({
+							count = 1,
+							severity = vim.diagnostic.severity.ERROR,
+						}),
+						"Next Error"
+					)
 
-					map("[e", jump_diagnostic({
-						count = -1,
-						severity = vim.diagnostic.severity.ERROR,
-					}), "Prev Error")
+					map(
+						"[e",
+						jump_diagnostic({
+							count = -1,
+							severity = vim.diagnostic.severity.ERROR,
+						}),
+						"Prev Error"
+					)
 
-					map("]w", jump_diagnostic({
-						count = 1,
-						severity = vim.diagnostic.severity.WARN,
-					}), "Next Warning")
+					map(
+						"]w",
+						jump_diagnostic({
+							count = 1,
+							severity = vim.diagnostic.severity.WARN,
+						}),
+						"Next Warning"
+					)
 
-					map("[w", jump_diagnostic({
-						count = -1,
-						severity = vim.diagnostic.severity.WARN,
-					}), "Prev Warning")
+					map(
+						"[w",
+						jump_diagnostic({
+							count = -1,
+							severity = vim.diagnostic.severity.WARN,
+						}),
+						"Prev Warning"
+					)
 				end,
 			})
 		end,

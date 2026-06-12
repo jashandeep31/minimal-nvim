@@ -28,6 +28,9 @@ return {
 		-- See :h blink-cmp-config-keymap for defining your own keymap
 		keymap = {
 			preset = "enter",
+			-- replacing the tab to the  ctr
+			["<Tab>"] = {}, -- unmap tab completely
+			["<C-g>"] = { "snippet_forward", "fallback" },
 		},
 
 		appearance = {
