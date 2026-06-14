@@ -1,0 +1,16 @@
+{
+  "TypeScript function documentation": {
+    "prefix": "tcom",
+    "body": [
+      "/**",
+      " * ${1:Describe what the function does.}",
+      " *",
+      " * @param ${2:parameter} - ${3:Describe the parameter.}",
+      " * @returns ${4:Describe the return value.}",
+      " * @throws ${5:Describe when the function throws.}",
+      "*/",
+      "$0"
+    ],
+    "description": "Create a TypeScript function documentation block"
+  }
+}

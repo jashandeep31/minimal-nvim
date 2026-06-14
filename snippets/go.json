@@ -1,0 +1,15 @@
+{
+  "Go documentation comment": {
+    "prefix": "gcom",
+    "body": [
+      "// ${1:FunctionName} ${2:describes what the function does.}",
+      "//",
+      "// Parameters:",
+      "//   - ${3:parameter}: ${4:Describe the parameter.}",
+      "//",
+      "// Returns: ${5:Describe the return value.}",
+      "$0"
+    ],
+    "description": "Create a Go documentation comment"
+  }
+}
