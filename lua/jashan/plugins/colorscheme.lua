@@ -1,12 +1,12 @@
 return {
-  -- {
-  -- 	"catppuccin/nvim",
-  -- 	name = "catppuccin",
-  -- 	priority = 1000,
-  -- 	config = function()
-  -- 		vim.cmd.colorscheme("catppuccin")
-  -- 	end,
-  -- },
+  {
+    "catppuccin/nvim",
+    name = "catppuccin",
+    priority = 1000,
+    config = function()
+      vim.cmd.colorscheme("catppuccin")
+    end,
+  },
   -- {
   -- 	"sainnhe/gruvbox-material",
   -- 	lazy = false,
@@ -20,20 +20,20 @@ return {
   -- 		vim.g.gruvbox_material_background = "hard"
   -- 	end,
   -- }
-  {
-    "folke/tokyonight.nvim",
-    lazy = false,
-    priority = 1000,
-    opts = {
-      style = "storm",     -- Choices: "storm", "moon", "night", "day"
-      transparent = false, -- Enable transparent background
-      terminal_colors = true,
-    },
-    config = function(_, opts)
-      require("tokyonight").setup(opts)
-      vim.cmd("colorscheme tokyonight")
-    end,
-  },
+  -- {
+  --   "folke/tokyonight.nvim",
+  --   lazy = false,
+  --   priority = 1000,
+  --   opts = {
+  --     style = "storm",     -- Choices: "storm", "moon", "night", "day"
+  --     transparent = false, -- Enable transparent background
+  --     terminal_colors = true,
+  --   },
+  --   config = function(_, opts)
+  --     require("tokyonight").setup(opts)
+  --     vim.cmd("colorscheme tokyonight")
+  --   end,
+  -- },
   --
   -- {
   -- 	"Shatur/neovim-ayu",

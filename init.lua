@@ -7,6 +7,7 @@ vim.cmd.filetype({ "plugin", "indent", "on" })
 
 vim.o.number = true
 vim.o.relativenumber = true
+vim.o.splitright = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.o.mouse = "a"

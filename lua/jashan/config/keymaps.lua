@@ -13,6 +13,10 @@ keymap.set("n", "OO", "O<Esc>j", { noremap = true, silent = true })
 
 -- clear search highlights
 keymap.set("n", "<leader>nh", ":nohl<CR>", { desc = "Clear search highlights" })
+keymap.set("n", "<leader>fp", function()
+	vim.fn.setreg("+", vim.fn.expand("%:."))
+	vim.notify("Copied file path")
+end, { desc = "Copy current file path" })
 
 -- Move lines up and down
 keymap.set("n", "<A-j>", ":m .+1<CR>==", { desc = "Move line down" })
