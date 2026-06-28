@@ -14,8 +14,8 @@ keymap.set("n", "OO", "O<Esc>j", { noremap = true, silent = true })
 -- clear search highlights
 keymap.set("n", "<leader>nh", ":nohl<CR>", { desc = "Clear search highlights" })
 keymap.set("n", "<leader>fp", function()
-	vim.fn.setreg("+", vim.fn.expand("%:."))
-	vim.notify("Copied file path")
+  vim.fn.setreg("+", vim.fn.expand("%:."))
+  vim.notify("Copied file path")
 end, { desc = "Copy current file path" })
 
 -- Move lines up and down
@@ -47,42 +47,46 @@ keymap.set("n", "<leader>to", "<cmd>BufferLineCloseOthers<CR>", { desc = "Close 
 keymap.set("n", "<leader>tl", "<cmd>BufferLineCloseLeft<CR>", { desc = "Close buffer tabs to the left" })
 keymap.set("n", "<leader>tr", "<cmd>BufferLineCloseRight<CR>", { desc = "Close buffer tabs to the right" })
 
-local function reload_config()
-	local current_file = vim.api.nvim_buf_get_name(0)
-
-	if vim.lsp.document_color then
-		pcall(vim.lsp.document_color.enable, false)
-	end
-
-	for _, client in ipairs(vim.lsp.get_clients()) do
-		client:stop(true)
-	end
-
-	for module_name in pairs(package.loaded) do
-		if module_name:match("^jashan") then
-			package.loaded[module_name] = nil
-		end
-	end
-
-	local config_file = vim.env.MYVIMRC or (vim.fn.stdpath("config") .. "/init.lua")
-	pcall(require, "jashan.config.keymaps")
-
-	local lazy_reloader_ok, lazy_reloader = pcall(require, "lazy.manage.reloader")
-	if lazy_reloader_ok then
-		lazy_reloader.reload({
-			{ file = config_file, what = "changed" },
-		})
-	end
-
-	if current_file ~= "" and vim.api.nvim_buf_get_name(0) == current_file then
-		pcall(vim.cmd, "edit!")
-	end
-
-	vim.schedule(function()
-		pcall(vim.cmd, "LspStart")
-		vim.notify("Neovim config reloaded", vim.log.levels.INFO)
-	end)
-end
+-- local function reload_config()
+-- 	local current_file = vim.api.nvim_buf_get_name(0)
+--
+-- 	if vim.lsp.document_color then
+-- 		pcall(vim.lsp.document_color.enable, false)
+-- 	end
+--
+-- 	for _, client in ipairs(vim.lsp.get_clients()) do
+-- 		client:stop(true)
+-- 	end
+--
+-- 	for module_name in pairs(package.loaded) do
+-- 		if module_name:match("^jashan") then
+-- 			package.loaded[module_name] = nil
+-- 		end
+-- 	end
+--
+-- 	local config_file = vim.env.MYVIMRC or (vim.fn.stdpath("config") .. "/init.lua")
+-- 	pcall(require, "jashan.config.keymaps")
+--
+-- 	local lazy_reloader_ok, lazy_reloader = pcall(require, "lazy.manage.reloader")
+-- 	if lazy_reloader_ok then
+-- 		lazy_reloader.reload({
+-- 			{ file = config_file, what = "changed" },
+-- 		})
+-- 	end
+--
+-- 	if current_file ~= "" and vim.api.nvim_buf_get_name(0) == current_file then
+-- 		pcall(vim.cmd, "edit!")
+-- 	end
+--
+-- 	vim.schedule(function()
+-- 		pcall(vim.cmd, "LspStart")
+-- 		vim.notify("Neovim config reloaded", vim.log.levels.INFO)
+-- 	end)
+-- end
 
 -- use jk to exit insert mode
-keymap.set("n", "<leader>rr", reload_config, { desc = "Reload Neovim config" })
+vim.keymap.set("n", "<leader>rr", function()
+  vim.cmd("bufdo e!")
+end, {
+  desc = "Reload all buffers from disk",
+})
