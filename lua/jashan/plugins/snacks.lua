@@ -13,7 +13,7 @@ return {
       enabled = false,
     },
     indent = { enabled = false },
-    input = { enabled = false },
+    input = { enabled = true },
     picker = { enabled = true },
     notifier = { enabled = false },
     quickfile = { enabled = false },
@@ -83,12 +83,12 @@ return {
               return
             end
             vim.schedule(function()
-              vim.cmd("DiffviewOpen " .. item.commit .. "^! -- " .. vim.fn.fnameescape(file))
+              vim.cmd("DiffviewOpen " .. item.commit .. " -- " .. vim.fn.fnameescape(file))
             end)
           end,
         })
       end,
-      desc = "Pick Commit Diff (File)",
+      desc = "Compare File With Commit",
     },
     {
       "<leader>lg",

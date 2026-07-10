@@ -10,6 +10,13 @@ return {
       vim.keymap.set("n", "<leader>cp", "crp", { remap = true, desc = "PascalCase" })
       vim.keymap.set("n", "<leader>ck", "crk", { remap = true, desc = "kebab-case" })
       vim.keymap.set("n", "<leader>cu", "cru", { remap = true, desc = "UPPER_CASE" })
+
+      vim.keymap.set("x", "cr", "<Plug>(abolish-coerce)", { remap = true, desc = "Coerce selection case" })
+      vim.keymap.set("x", "<leader>cs", "<Plug>(abolish-coerce)s", { remap = true, desc = "snake_case" })
+      vim.keymap.set("x", "<leader>cc", "<Plug>(abolish-coerce)c", { remap = true, desc = "camelCase" })
+      vim.keymap.set("x", "<leader>cp", "<Plug>(abolish-coerce)p", { remap = true, desc = "PascalCase" })
+      vim.keymap.set("x", "<leader>ck", "<Plug>(abolish-coerce)k", { remap = true, desc = "kebab-case" })
+      vim.keymap.set("x", "<leader>cu", "<Plug>(abolish-coerce)u", { remap = true, desc = "UPPER_CASE" })
     end,
   },
 
