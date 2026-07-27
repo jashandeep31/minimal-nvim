@@ -1,92 +1,105 @@
--- leader key to space
+-- Keep the leader values here as well as in lazy.lua so this file is safe to
+-- load on its own. These must be set before any mappings are created.
 vim.g.mapleader = " "
-local keymap = vim.keymap -- for conciseness
+vim.g.maplocalleader = "\\"
 
--- jk to escape
-keymap.set("i", "jk", "<ESC>", { desc = "Exit insert mode with jk" })
-keymap.set("n", "qq", "<cmd>q!<CR>", { desc = "Quit window" })
+local map = vim.keymap.set
 
--- oo: insert line below, stay in normal mode
-keymap.set("n", "oo", "o<Esc>", { noremap = true, silent = true })
--- OO: insert line above, stay in normal mode
-keymap.set("n", "OO", "O<Esc>j", { noremap = true, silent = true })
+local function opts(description, extra)
 
--- clear search highlights
-keymap.set("n", "<leader>nh", ":nohl<CR>", { desc = "Clear search highlights" })
-keymap.set("n", "<leader>fp", function()
-  vim.fn.setreg("+", vim.fn.expand("%:."))
-  vim.notify("Copied file path")
-end, { desc = "Copy current file path" })
+	local options = {
+		desc = description,
+		silent = true,
+		noremap = true,
+	}
 
--- Move lines up and down
-keymap.set("n", "<A-j>", ":m .+1<CR>==", { desc = "Move line down" })
-keymap.set("n", "<A-k>", ":m .-2<CR>==", { desc = "Move line up" })
-keymap.set("v", "<A-j>", ":m '>+1<CR>gv=gv", { desc = "Move selection down" })
-keymap.set("v", "<A-k>", ":m '<-2<CR>gv=gv", { desc = "Move selection up" })
+	if extra then
+		for key, value in pairs(extra) do
+			options[key] = value
+		end
+	end
 
--- Buffer navigation with Shift + h/l
-vim.keymap.set("n", "H", ":bprevious<CR>", { desc = "Previous buffer" })
-vim.keymap.set("n", "L", ":bnext<CR>", { desc = "Next buffer" })
+	return options
+end
 
---  See `:help wincmd` for a list of all window commands
-vim.keymap.set("n", "<C-h>", "<C-w><C-h>", { desc = "Move focus to the left window" })
-vim.keymap.set("n", "<C-l>", "<C-w><C-l>", { desc = "Move focus to the right window" })
-vim.keymap.set("n", "<C-j>", "<C-w><C-j>", { desc = "Move focus to the lower window" })
-vim.keymap.set("n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper window" })
+local function reload_workspace()
+	-- :checktime refreshes files changed by commands such as `go mod tidy`, but
+	-- does not overwrite a buffer containing unsaved changes.
+	vim.cmd("silent! checktime")
 
--- Split the current buffer into another window
-keymap.set("n", "<leader>sh", "<cmd>split<CR>", { desc = "Split current buffer horizontally" })
-keymap.set("n", "<leader>sv", "<cmd>vsplit<CR>", { desc = "Split current buffer vertically" })
+	local clients = vim.lsp.get_clients()
+	local client_names = {}
 
--- Buffer/tab actions (bufferline)
-keymap.set("n", "<leader>tn", "<cmd>BufferLineCycleNext<CR>", { desc = "Next buffer tab" })
-keymap.set("n", "<leader>tN", "<cmd>BufferLineCyclePrev<CR>", { desc = "Previous buffer tab" })
-keymap.set("n", "<leader>tp", "<cmd>BufferLinePick<CR>", { desc = "Pick buffer tab" })
-keymap.set("n", "<leader>tc", "<cmd>BufferLinePickClose<CR>", { desc = "Pick buffer tab to close" })
-keymap.set("n", "<leader>to", "<cmd>BufferLineCloseOthers<CR>", { desc = "Close other buffer tabs" })
-keymap.set("n", "<leader>tl", "<cmd>BufferLineCloseLeft<CR>", { desc = "Close buffer tabs to the left" })
-keymap.set("n", "<leader>tr", "<cmd>BufferLineCloseRight<CR>", { desc = "Close buffer tabs to the right" })
+	for _, client in ipairs(clients) do
+		client_names[client.name] = true
+		client:stop(true)
+	end
+	vim.diagnostic.reset(nil)
 
--- local function reload_config()
--- 	local current_file = vim.api.nvim_buf_get_name(0)
---
--- 	if vim.lsp.document_color then
--- 		pcall(vim.lsp.document_color.enable, false)
--- 	end
---
--- 	for _, client in ipairs(vim.lsp.get_clients()) do
--- 		client:stop(true)
--- 	end
---
--- 	for module_name in pairs(package.loaded) do
--- 		if module_name:match("^jashan") then
--- 			package.loaded[module_name] = nil
--- 		end
--- 	end
---
--- 	local config_file = vim.env.MYVIMRC or (vim.fn.stdpath("config") .. "/init.lua")
--- 	pcall(require, "jashan.config.keymaps")
---
--- 	local lazy_reloader_ok, lazy_reloader = pcall(require, "lazy.manage.reloader")
--- 	if lazy_reloader_ok then
--- 		lazy_reloader.reload({
--- 			{ file = config_file, what = "changed" },
--- 		})
--- 	end
---
--- 	if current_file ~= "" and vim.api.nvim_buf_get_name(0) == current_file then
--- 		pcall(vim.cmd, "edit!")
--- 	end
---
--- 	vim.schedule(function()
--- 		pcall(vim.cmd, "LspStart")
--- 		vim.notify("Neovim config reloaded", vim.log.levels.INFO)
--- 	end)
--- end
+	-- Native Neovim LSP enables clients through FileType/BufEnter autocmds.
+	-- Toggling the clients makes gopls reread go.mod/go.sum and rebuild its
+	-- module cache instead of continuing with stale metadata.
+	if vim.lsp.enable then
+		for name in pairs(client_names) do
+			vim.lsp.enable(name, false)
+		end
+		for name in pairs(client_names) do
+			vim.lsp.enable(name, true)
+		end
+	end
 
--- use jk to exit insert mode
-vim.keymap.set("n", "<leader>rr", function()
-  vim.cmd("bufdo e!")
-end, {
-  desc = "Reload all buffers from disk",
-})
+	-- Re-run the attach autocmd for the current buffer. This is harmless when
+	-- no LSP is configured for the filetype.
+	vim.api.nvim_exec_autocmds("BufEnter", { buffer = 0, modeline = false })
+	vim.notify("Buffers and LSP workspace reloaded", vim.log.levels.INFO)
+end
+
+-- Insert mode and quit helpers.
+map("i", "jk", "<Esc>", opts("Exit insert mode"))
+map("n", "qq", "<cmd>q!<CR>", opts("Quit window"))
+
+-- Insert a blank line while staying in normal mode.
+map("n", "oo", "o<Esc>", opts("Insert line below"))
+map("n", "OO", "O<Esc>j", opts("Insert line above"))
+
+-- Search and path helpers.
+map("n", "<leader>nh", "<cmd>nohlsearch<CR>", opts("Clear search highlights"))
+map("n", "<leader>fp", function()
+	local path = vim.fn.expand("%:.")
+	vim.fn.setreg("+", path)
+	vim.notify("Copied: " .. path, vim.log.levels.INFO)
+end, opts("Copy current file path"))
+
+-- Move lines and selections.
+map("n", "<A-j>", "<cmd>m .+1<CR>==", opts("Move line down"))
+map("n", "<A-k>", "<cmd>m .-2<CR>==", opts("Move line up"))
+map("x", "<A-j>", ":m '>+1<CR>gv=gv", opts("Move selection down"))
+map("x", "<A-k>", ":m '<-2<CR>gv=gv", opts("Move selection up"))
+
+-- Buffer and window navigation.
+map("n", "H", "<cmd>bprevious<CR>", opts("Previous buffer"))
+map("n", "L", "<cmd>bnext<CR>", opts("Next buffer"))
+map("n", "<C-h>", "<C-w><C-h>", opts("Focus left window"))
+map("n", "<C-j>", "<C-w><C-j>", opts("Focus lower window"))
+map("n", "<C-k>", "<C-w><C-k>", opts("Focus upper window"))
+map("n", "<C-l>", "<C-w><C-l>", opts("Focus right window"))
+map("n", "<leader>sh", "<cmd>split<CR>", opts("Split horizontally"))
+map("n", "<leader>sv", "<cmd>vsplit<CR>", opts("Split vertically"))
+
+-- Bufferline actions.
+map("n", "<leader>tn", "<cmd>BufferLineCycleNext<CR>", opts("Next tab"))
+map("n", "<leader>tN", "<cmd>BufferLineCyclePrev<CR>", opts("Previous tab"))
+map("n", "<leader>tp", "<cmd>BufferLinePick<CR>", opts("Pick tab"))
+map("n", "<leader>tc", "<cmd>BufferLinePickClose<CR>", opts("Pick tab to close"))
+map("n", "<leader>to", "<cmd>BufferLineCloseOthers<CR>", opts("Close other tabs"))
+map("n", "<leader>tl", "<cmd>BufferLineCloseLeft<CR>", opts("Close tabs to the left"))
+map("n", "<leader>tr", "<cmd>BufferLineCloseRight<CR>", opts("Close tabs to the right"))
+
+-- Reload files changed outside Neovim and restart LSP clients. In Go
+-- projects this is the action to use after changing go.mod/go.sum and
+-- running `go mod tidy`.
+map("n", "<leader>rr", reload_workspace, opts("Reload buffers and restart LSP"))
+
+return {
+	reload_workspace = reload_workspace,
+}
