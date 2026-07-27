@@ -82,6 +82,11 @@ return {
 					filetypes = { "css", "scss", "less" },
 					root_markers = { "package.json", ".git" },
 				},
+				dockerls = {
+					cmd = { "docker-langserver", "--stdio" },
+					filetypes = { "dockerfile" },
+					root_markers = { "Dockerfile", "docker-compose.yml", "docker-compose.yaml", ".git" },
+				},
 				tailwindcss = {
 					cmd = { "tailwindcss-language-server", "--stdio" },
 					filetypes = {
@@ -124,6 +129,11 @@ return {
 					filetypes = { "prisma" },
 					root_markers = { "schema.prisma", "package.json", ".git" },
 				},
+				sqls = {
+					cmd = { "sqls", },
+					filetypes = { "sql", },
+					root_markers = { "config.yml", ".sqls.yml", ".sqls.yaml", ".git" },
+				},
 				emmet_ls = {
 					cmd = { "emmet-ls", "--stdio" },
 					filetypes = {
@@ -152,6 +162,13 @@ return {
 						".eslintrc.json",
 						"package.json",
 						".git",
+					},
+					settings = {
+						eslint = {
+							format = {
+								enable = true,
+							},
+						},
 					},
 				},
 			}
@@ -245,6 +262,13 @@ return {
 				group = vim.api.nvim_create_augroup("jashan_lsp", { clear = true }),
 				callback = function(args)
 					local bufnr = args.buf
+					local client = vim.lsp.get_client_by_id(args.data.client_id)
+					if client and client.name == "sqls" then
+						local ok, sqls = pcall(require, "sqls")
+						if ok then
+							sqls.on_attach(client, bufnr)
+						end
+					end
 
 					local function map(lhs, rhs, desc, mode)
 						mode = mode or "n"

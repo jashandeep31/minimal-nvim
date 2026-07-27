@@ -30,7 +30,7 @@ return {
 
 				local ok, commentstring = pcall(ts_pre_hook, ctx)
 
-				if ok then
+				if ok and commentstring then
 					return commentstring
 				end
 

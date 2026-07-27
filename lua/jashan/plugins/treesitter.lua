@@ -23,6 +23,7 @@ return {
 			"gosum",
 			"gowork",
 			"json",
+			"sql",
 			"prisma",
 			"yaml",
 		}

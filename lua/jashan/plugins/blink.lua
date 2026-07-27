@@ -41,6 +41,10 @@ return {
 
 		-- (Default) Only show the documentation popup when manually triggered
 		completion = {
+			accept = {
+				-- Insert the completion name only; do not append `()` for functions.
+				auto_brackets = { enabled = false },
+			},
 			documentation = { auto_show = true },
 			list = {
 				selection = {
