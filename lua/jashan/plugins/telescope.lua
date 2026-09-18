@@ -66,6 +66,8 @@ return {
 
 		telescope.setup({
 			defaults = {
+				-- Keep the filename visible when a path is wider than the results window.
+				path_display = { "truncate" },
 				file_ignore_patterns = {
 					"node_modules",
 					".git/",

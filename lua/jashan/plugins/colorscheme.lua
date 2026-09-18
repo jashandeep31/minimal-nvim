@@ -48,4 +48,19 @@ return {
   -- 		require("ayu").colorscheme()
   -- 	end,
   -- },
+  -- {
+  --   "EdenEast/nightfox.nvim",
+  --   priority = 1000,
+  --   config = function()
+  --     require("nightfox").setup({
+  --       palettes = {
+  --         nightfox = {
+  --           bg1 = "#000000",
+  --         },
+  --       },
+  --     })
+  --
+  --     vim.cmd("colorscheme nightfox")
+  --   end,
+  -- },
 }

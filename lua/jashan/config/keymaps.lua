@@ -6,52 +6,51 @@ vim.g.maplocalleader = "\\"
 local map = vim.keymap.set
 
 local function opts(description, extra)
+  local options = {
+    desc = description,
+    silent = true,
+    noremap = true,
+  }
 
-	local options = {
-		desc = description,
-		silent = true,
-		noremap = true,
-	}
+  if extra then
+    for key, value in pairs(extra) do
+      options[key] = value
+    end
+  end
 
-	if extra then
-		for key, value in pairs(extra) do
-			options[key] = value
-		end
-	end
-
-	return options
+  return options
 end
 
 local function reload_workspace()
-	-- :checktime refreshes files changed by commands such as `go mod tidy`, but
-	-- does not overwrite a buffer containing unsaved changes.
-	vim.cmd("silent! checktime")
+  -- :checktime refreshes files changed by commands such as `go mod tidy`, but
+  -- does not overwrite a buffer containing unsaved changes.
+  vim.cmd("silent! checktime")
 
-	local clients = vim.lsp.get_clients()
-	local client_names = {}
+  local clients = vim.lsp.get_clients()
+  local client_names = {}
 
-	for _, client in ipairs(clients) do
-		client_names[client.name] = true
-		client:stop(true)
-	end
-	vim.diagnostic.reset(nil)
+  for _, client in ipairs(clients) do
+    client_names[client.name] = true
+    client:stop(true)
+  end
+  vim.diagnostic.reset(nil)
 
-	-- Native Neovim LSP enables clients through FileType/BufEnter autocmds.
-	-- Toggling the clients makes gopls reread go.mod/go.sum and rebuild its
-	-- module cache instead of continuing with stale metadata.
-	if vim.lsp.enable then
-		for name in pairs(client_names) do
-			vim.lsp.enable(name, false)
-		end
-		for name in pairs(client_names) do
-			vim.lsp.enable(name, true)
-		end
-	end
+  -- Native Neovim LSP enables clients through FileType/BufEnter autocmds.
+  -- Toggling the clients makes gopls reread go.mod/go.sum and rebuild its
+  -- module cache instead of continuing with stale metadata.
+  if vim.lsp.enable then
+    for name in pairs(client_names) do
+      vim.lsp.enable(name, false)
+    end
+    for name in pairs(client_names) do
+      vim.lsp.enable(name, true)
+    end
+  end
 
-	-- Re-run the attach autocmd for the current buffer. This is harmless when
-	-- no LSP is configured for the filetype.
-	vim.api.nvim_exec_autocmds("BufEnter", { buffer = 0, modeline = false })
-	vim.notify("Buffers and LSP workspace reloaded", vim.log.levels.INFO)
+  -- Re-run the attach autocmd for the current buffer. This is harmless when
+  -- no LSP is configured for the filetype.
+  vim.api.nvim_exec_autocmds("BufEnter", { buffer = 0, modeline = false })
+  vim.notify("Buffers and LSP workspace reloaded", vim.log.levels.INFO)
 end
 
 -- Insert mode and quit helpers.
@@ -64,10 +63,13 @@ map("n", "OO", "O<Esc>j", opts("Insert line above"))
 
 -- Search and path helpers.
 map("n", "<leader>nh", "<cmd>nohlsearch<CR>", opts("Clear search highlights"))
+map("n", "<leader>ns", function()
+  vim.snippet.stop()
+end, opts("Stop snippet"))
 map("n", "<leader>fp", function()
-	local path = vim.fn.expand("%:.")
-	vim.fn.setreg("+", path)
-	vim.notify("Copied: " .. path, vim.log.levels.INFO)
+  local path = vim.fn.expand("%:.")
+  vim.fn.setreg("+", path)
+  vim.notify("Copied: " .. path, vim.log.levels.INFO)
 end, opts("Copy current file path"))
 
 -- Move lines and selections.
@@ -101,5 +103,5 @@ map("n", "<leader>tr", "<cmd>BufferLineCloseRight<CR>", opts("Close tabs to the 
 map("n", "<leader>rr", reload_workspace, opts("Reload buffers and restart LSP"))
 
 return {
-	reload_workspace = reload_workspace,
+  reload_workspace = reload_workspace,
 }

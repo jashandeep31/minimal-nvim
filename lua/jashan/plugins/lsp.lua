@@ -54,7 +54,10 @@ return {
             "typescript",
             "typescriptreact",
           },
-          root_markers = { "package.json", "tsconfig.json", "jsconfig.json", ".git" },
+          -- Prefer the compiler project over a package manifest. In monorepos,
+          -- package.json is often nested, whereas tsconfig.json/jsconfig.json
+          -- defines the workspace that TypeScript should index for renames.
+          root_markers = { { "tsconfig.json", "jsconfig.json" }, "package.json", ".git" },
           settings = {
             typescript = {
               inlayHints = {
