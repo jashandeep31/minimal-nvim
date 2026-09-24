@@ -2,6 +2,9 @@
 require("jashan.config.keymaps")
 require("jashan.config.lazy")
 
+vim.opt.backup = false
+vim.opt.writebackup = false
+
 vim.cmd.syntax("enable")
 vim.cmd.filetype({ "plugin", "indent", "on" })
 
@@ -37,7 +40,7 @@ vim.o.timeoutlen = 300
 
 -- using the system clipboard
 vim.schedule(function()
-	vim.o.clipboard = "unnamedplus"
+  vim.o.clipboard = "unnamedplus"
 end)
 
 -- Enable persistent undo

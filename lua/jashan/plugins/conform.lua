@@ -19,6 +19,7 @@ return {
 			scss = { "prettier" },
 			less = { "prettier" },
 			dockerfile = { "dockerfmt" },
+			yaml = { "prettierd", "prettier" },
 			javascript = { "prettierd" },
 			typescript = { "prettierd" },
 			javascriptreact = { "prettierd" },

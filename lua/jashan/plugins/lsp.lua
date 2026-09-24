@@ -90,6 +90,29 @@ return {
           filetypes = { "dockerfile" },
           root_markers = { "Dockerfile", "docker-compose.yml", "docker-compose.yaml", ".git" },
         },
+        yamlls = {
+          cmd = { "yaml-language-server", "--stdio" },
+          filetypes = { "yaml", "yaml.docker-compose" },
+          root_markers = {
+            "docker-compose.yml",
+            "docker-compose.yaml",
+            "compose.yml",
+            "compose.yaml",
+            ".git",
+          },
+          settings = {
+            yaml = {
+              schemas = {
+                ["https://raw.githubusercontent.com/compose-spec/compose-spec/main/schema/compose-spec.json"] = {
+                  "docker-compose.yml",
+                  "docker-compose.yaml",
+                  "compose.yml",
+                  "compose.yaml",
+                },
+              },
+            },
+          },
+        },
         tailwindcss = {
           cmd = { "tailwindcss-language-server", "--stdio" },
           filetypes = {

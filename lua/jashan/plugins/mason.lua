@@ -19,6 +19,7 @@ return {
 				"html",
 				"cssls",
 				"dockerls",
+				"yamlls",
 				"tailwindcss",
 				"svelte",
 				"pyright",
