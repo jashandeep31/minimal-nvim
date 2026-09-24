@@ -5,6 +5,7 @@ return {
 		local filetypes = {
 			"bash",
 			"c",
+			"cpp",
 			"diff",
 			"html",
 			"lua",

@@ -15,6 +15,7 @@ return {
 			ensure_installed = {
 				"lua_ls",
 				"gopls",
+				"clangd",
 				"ts_ls",
 				"html",
 				"cssls",
