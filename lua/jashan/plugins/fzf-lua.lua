@@ -48,11 +48,16 @@ return {
 	},
 	opts = {
 		winopts = {
-			preview = { default = "bat" },
+			preview = {
+				default = "bat",
+				layout = "horizontal",
+				horizontal = "right:35%",
+			},
 		},
 		fzf_opts = {
 			["--layout"] = "reverse",
 			["--info"] = "inline",
+			["--keep-right"] = true,
 		},
 	},
 }

@@ -20,7 +20,7 @@ vim.o.showmode = false
 
 -- Common indentation defaults for all new buffers.
 -- Language-specific ftplugins can still override these locally.
-vim.o.expandtab = true
+vim.o.expandtab = false
 vim.o.tabstop = 2
 vim.o.softtabstop = 2
 vim.o.shiftwidth = 2

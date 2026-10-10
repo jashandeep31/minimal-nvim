@@ -225,7 +225,7 @@ return {
 
       vim.diagnostic.config({
         severity_sort = true,
-        update_in_insert = true,
+        update_in_insert = false,
         float = {
           border = "rounded",
           source = "if_many",
@@ -309,10 +309,10 @@ return {
           end
 
           map("gd", function()
-            require("telescope.builtin").lsp_definitions()
+            require("telescope.builtin").lsp_definitions({ file_ignore_patterns = {} })
           end, "LSP: Definitions")
           map("gr", function()
-            require("telescope.builtin").lsp_references()
+            require("telescope.builtin").lsp_references({ file_ignore_patterns = {} })
           end, "LSP: References")
 
           map("gD", smart_jump_new_tab("textDocument/declaration"), "LSP: Declaration")

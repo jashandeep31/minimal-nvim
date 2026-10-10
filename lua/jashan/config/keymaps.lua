@@ -54,7 +54,7 @@ local function reload_workspace()
 end
 
 -- Insert mode and quit helpers.
-map("i", "jk", "<Esc>", opts("Exit insert mode"))
+map("i", "jk", "<Cmd>lua vim.snippet.stop()<CR><Esc>", opts("Stop snippet and exit insert mode"))
 map("n", "qq", "<cmd>q!<CR>", opts("Quit window"))
 
 -- Insert a blank line while staying in normal mode.
