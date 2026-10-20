@@ -20,6 +20,8 @@ return {
 			"tsx",
 			"css",
 			"go",
+			"rust",
+			"toml",
 			"gomod",
 			"gosum",
 			"gowork",

@@ -30,6 +30,7 @@ return {
 			python = { "isort", "black" },
 			prisma = { "prismals" },
 			go = { "goimports", "gofumpt" },
+			rust = { "rustfmt" },
 			sql = { "sql_formatter" },
 		},
 		format_on_save = {

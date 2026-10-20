@@ -46,6 +46,11 @@ return {
             },
           },
         },
+        rust_analyzer = {
+          cmd = { "rust-analyzer" },
+          filetypes = { "rust" },
+          root_markers = { "Cargo.toml", "rust-project.json", ".git" },
+        },
         clangd = {
           cmd = { "clangd" },
           filetypes = { "c", "cpp", "objc", "objcpp", "cuda" },
