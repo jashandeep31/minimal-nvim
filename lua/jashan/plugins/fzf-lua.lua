@@ -39,8 +39,19 @@ return {
 			function()
 				require("fzf-lua").files({
 					prompt = ".env Files> ",
-					cmd = "rg --files --hidden --glob '!.git' --glob '*.env*'",
+					cwd_prompt = false,
+					raw_cmd = table.concat({
+						"fd -t f -H -I -g '.env*'",
+						"-E .git",
+						"-E node_modules",
+						"-E .next",
+						"-E dist",
+						"-E build",
+						"-E vendor",
+					}, " "),
 					previewer = false,
+					file_icons = false,
+					git_icons = false,
 				})
 			end,
 			desc = "Find .env files",
